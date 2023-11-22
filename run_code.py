@@ -1,6 +1,8 @@
 import os
 import cv2
+import sys
 import numpy as np
+import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, f1_score
 from tensorflow.keras import layers, models, optimizers
@@ -22,7 +24,7 @@ def load_and_preprocess_images(folder_path, label):
     images = []
     labels = []
     for filename in os.listdir(folder_path):
-        if filename.endswith(".jpg"):
+        if (filename.endswith(".jpg") or filename.endswith(".png")):
             image_path = os.path.join(folder_path, filename)
             image = cv2.imread(image_path)
             if image is not None:
@@ -32,10 +34,10 @@ def load_and_preprocess_images(folder_path, label):
                 labels.append(label)
     return images, labels
 
-dataset_dir = "train"
+dataset_dir = sys.argv[1]
 
-open_folder = os.path.join(dataset_dir, "Open")
-closed_folder = os.path.join(dataset_dir, "Closed")
+open_folder = os.path.join(dataset_dir, "Open_Eyes")
+closed_folder = os.path.join(dataset_dir, "Closed_Eyes")
 
 if not os.path.exists(open_folder) or not os.path.exists(closed_folder):
     print("Error: 'Open' or 'Closed' folders not found.")
